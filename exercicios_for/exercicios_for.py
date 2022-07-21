@@ -1,4 +1,4 @@
-vendas = [100, 150, 1500, 2000, 120]
+vendas = [101, 150, 1500, 2000, 120]
 meta = 110
 
 for venda in vendas:
