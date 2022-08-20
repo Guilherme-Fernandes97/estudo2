@@ -10,4 +10,5 @@ cursor = conexao.cursor()
 cursor.execute("SELECT * FROM Salaries")
 valores = cursor.fetchall()
 
-print(valores)
+cursor.close()
+conexao.close()
