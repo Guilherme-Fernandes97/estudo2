@@ -1,9 +1,9 @@
 from datetime import datetime
 import pytz
+from random import randint
 
 
 class ContaCorrente:
-
     """
     Cria um objeto ContaCorrente para gerenciar as contas dos clientes.
 
@@ -32,6 +32,7 @@ class ContaCorrente:
         self._agencia = agencia
         self._num_conta = num_conta
         self._transacoes = []
+        self.cartoes = []
 
     def consultar_saldo(self):
         print(f'Seu saldo atual é de R${self._saldo:,.2f}')
@@ -72,26 +73,32 @@ class ContaCorrente:
             conta_destino._transacoes.append((valor, conta_destino._saldo, ContaCorrente._data_hora()))
 
 
+class CartaoCredito:
+
+    @staticmethod
+    def _data_hora():
+        fuso_BR = pytz.timezone('Brazil/East')
+        horario_BR = datetime.now(fuso_BR)
+        return horario_BR
+
+    def __init__(self, titular, conta_corrente):
+        self.numero = randint(1000000000000000, 9999999999999999)
+        self.titular = titular
+        self.validade = f'{CartaoCredito._data_hora().month}/{CartaoCredito._data_hora().year + 4}'
+        self.cod_seguranca = f'{randint(0, 9)}{randint(0, 9)}{randint(0, 9)}'
+        self.limite = 1000
+        self.conta_corrente = conta_corrente
+        conta_corrente.cartoes.append(self)
+
+
 # Programa
 
 conta_Lira = ContaCorrente("Lira", "111.222.333-45", 1234, 34062)
-conta_Lira.consultar_saldo()
 
-# Depositando dinheiro na conta
-conta_Lira.depositar(10000)
-conta_Lira.consultar_saldo()
+cartao_lira = CartaoCredito('Lira', conta_Lira)
 
-conta_Lira.consultar_saldo()
-conta_Lira.consultar_limite_chequeespecial()
+print(cartao_lira.conta_corrente._num_conta)
 
-print('-' * 20)
-
-conta_Lira.consultar_historico_transacoes()
-
-print('-' * 20)
-
-conta_maeLira = ContaCorrente("Beth", "111.333.444-56", 1234, 40062)
-conta_Lira.transferir(1000, conta_maeLira)
-
-conta_Lira.consultar_historico_transacoes()
-conta_maeLira.consultar_historico_transacoes()
+print(cartao_lira.numero)
+print(cartao_lira.cod_seguranca)
+print(cartao_lira.validade)
