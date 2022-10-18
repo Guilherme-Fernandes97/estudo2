@@ -26,11 +26,11 @@ class ContaCorrente:
 
     def __init__(self, nome, cpf, agencia, num_conta):
         self._limite = None
-        self._nome = nome
-        self._cpf = cpf
+        self.nome = nome
+        self.cpf = cpf
         self._saldo = 0
-        self._agencia = agencia
-        self._num_conta = num_conta
+        self.agencia = agencia
+        self.num_conta = num_conta
         self._transacoes = []
         self.cartoes = []
 
@@ -87,18 +87,17 @@ class CartaoCredito:
         self.validade = f'{CartaoCredito._data_hora().month}/{CartaoCredito._data_hora().year + 4}'
         self.cod_seguranca = f'{randint(0, 9)}{randint(0, 9)}{randint(0, 9)}'
         self.limite = 1000
+        self._senha = '1234'
         self.conta_corrente = conta_corrente
         conta_corrente.cartoes.append(self)
 
+    @property
+    def senha(self):
+        return self._senha
 
-# Programa
-
-conta_Lira = ContaCorrente("Lira", "111.222.333-45", 1234, 34062)
-
-cartao_lira = CartaoCredito('Lira', conta_Lira)
-
-print(cartao_lira.conta_corrente._num_conta)
-
-print(cartao_lira.numero)
-print(cartao_lira.cod_seguranca)
-print(cartao_lira.validade)
+    @senha.setter
+    def senha(self, valor):
+        if len(valor) == 4 and valor.isnumeric():
+            self._senha = valor
+        else:
+            print("Nova senha inválida")
