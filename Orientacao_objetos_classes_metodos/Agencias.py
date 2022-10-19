@@ -1,3 +1,6 @@
+from random import randint
+
+
 class Agencia:
 
     def __init__(self, telefone, cnpj, numero):
@@ -30,20 +33,54 @@ class AgenciaVirtual(Agencia):
         self.site = site
         super().__init__(telefone, cnpj, 1000)
         self.caixa = 1000000
+        self.caixa_paypal = 0
 
+    def depositar_paypal(self,valor):
+        if self.caixa > valor:
+            self.caixa -= valor
+            self.caixa_paypal += valor
+        else:
+            print(f'Dinheiro não disponível em caixa, o caixa é de {self.caixa:,.2f}')
+
+    def sacar_paypal(self, valor):
+        if self.caixa > valor:
+            self.caixa_paypal -= valor
+            self.caixa += valor
+        else:
+            print(f'Dinheiro não disponível em caixa, o caixa é de {self.caixa_paypal:,.2f}')
 
 class AgenciaComum(Agencia):
 
-    pass
+    def __init__(self, telefone, cnpj):
+        super().__init__(telefone, cnpj, numero=randint(1001, 9999))
+        self.caixa = 1000000
+
 
 class AgenciaPremium(Agencia):
 
-    pass
+    def __init__(self, telefone, cnpj):
+        super().__init__(telefone, cnpj, numero=randint(1001, 9999))
+        self.caixa = 10000000
+
+    def adicionar_cliente(self, nome, cpf, patrimonio):
+        if patrimonio > 1000000:
+            super().adicionar_cliente(nome, cpf, patrimonio)
+        else:
+            print(f'O cliente não tem o patrimônio mínimo necessário para entrar na âgencia premium')
 
 
+agencia_virtual = AgenciaVirtual('www.agenciavirtual.com.br', 1023032, 1032032 )
+agencia_virtual.depositar_paypal(900000)
 
-agencia1 = Agencia(22222, 3289320, 30902)
+print(agencia_virtual.caixa_paypal)
 
-agencia_virtual = AgenciaVirtual('www.agenciavirtual.com.br', 2002200, 200202)
-agencia_virtual.verificar_caixa()
-print(agencia_virtual.telefone)
+agencia_virtual.sacar_paypal(800000)
+
+print(agencia_virtual.caixa_paypal)
+print(agencia_virtual.caixa)
+
+print('-' * 90)
+
+agencia_premium = AgenciaPremium(1031020, 13902392,)
+agencia_premium.adicionar_cliente('Guilherme', 132032, 8000000)
+print(agencia_premium.clientes)
